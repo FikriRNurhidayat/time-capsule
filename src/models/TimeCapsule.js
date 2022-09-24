@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         subject: this.subject,
         message: this.message,
         active: this.active,
+        attachmentUrl: this.attachmentUrl,
         createdAt: this.createdAt,
         updatedAt: this.updatedAt,
         releasedAt: this.releasedAt,

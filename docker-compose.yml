@@ -1,0 +1,58 @@
+version: "3.9"
+services:
+  db:
+    container_name: timecapsule-db
+    hostname: timecapsule-db
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  timecapsule-httpd:
+    container_name: timecapsule-httpd
+    hostname: timecapsule-httpd
+    image: fikrirnurhidayat/timecapsule:latest
+    command: sh -c "(yarn db:create || echo 'database already exists') && yarn db:migrate && yarn start"
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - TIME_CAPSULE_BASE_URL=http://localhost:8080
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=timecapsule_production
+      - DATABASE_HOST=timecapsule-db
+    volumes:
+      - uploads:/opt/timecapsule/public/uploads
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  timecapsule-workerd:
+    container_name: timecapsule-workerd
+    hostname: timecapsule-workerd
+    image: fikrirnurhidayat/timecapsule:latest
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - TIME_CAPSULE_BASE_URL=http://localhost:8080
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=timecapsule_production
+      - DATABASE_HOST=timecapsule-db
+    command: yarn work
+    volumes:
+      - uploads:/opt/timecapsule/public/uploads
+    depends_on:
+      - timecapsule-httpd
+
+volumes:
+  db:
+    driver: local
+  uploads:
+    driver: local

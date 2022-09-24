@@ -10,9 +10,8 @@ class UploadFileService {
   formatFileName(originalname) {
     const ext = path.extname(originalname);
     const timestamp = Date.now();
-    const filename = originalname.slice(0, -ext.length);
 
-    return `${filename}-${timestamp}` + ext;
+    return timestamp + ext;
   }
 
   async call({ originalname, mimetype, buffer }) {

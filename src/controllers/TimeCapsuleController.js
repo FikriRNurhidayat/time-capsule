@@ -42,9 +42,12 @@ class TimeCapsuleController extends Controller {
    *                        properties:
    *                            subject:
    *                                type: string
+   *                                minLength: 1
+   *                                maxLength: 255
    *                                example: "Remember the day when you're in love?"
    *                            message:
    *                                type: string
+   *                                minLength: 1
    *                                example: "Yeah, you must remember it."
    *                            attachmentUrl:
    *                                type: string
@@ -172,6 +175,10 @@ class TimeCapsuleController extends Controller {
    *          name: pageSize
    *          schema:
    *            type: integer
+   *        - in: query
+   *          name: active
+   *          schema:
+   *            type: boolean
    *        responses:
    *            400:
    *                description: List time capsules request is not satisifiable.

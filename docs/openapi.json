@@ -4,12 +4,42 @@
     "title": "Time Capsule",
     "version": "1.0.0"
   },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 500
+          },
+          "reason": {
+            "type": "string",
+            "example": "INTERNAL_SERVER_ERROR"
+          },
+          "message": {
+            "type": "string",
+            "example": "Internal server error. Please report it to the back-end developer."
+          }
+        }
+      }
+    }
+  },
   "paths": {
     "/v1/login": {
       "post": {
         "summary": "Login",
         "description": "Retrieve access token by sending existing credentials",
         "operationId": "login",
+        "tags": [
+          "Authentication"
+        ],
         "requestBody": {
           "description": "Login request payload",
           "required": true,
@@ -18,6 +48,10 @@
               "schema": {
                 "title": "LoginRequest",
                 "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -48,13 +82,49 @@
                       "type": "object",
                       "properties": {
                         "accessToken": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM4ODNjOGE2LTE1ODEtNDE4MS1hYmM1LWI2ODVkMjg4YjdhMiIsImlhdCI6MTY2MzcwMzg4NiwiZXhwIjoxNjYzNzA0NDg2fQ.ER-yzeQ6cLh-k7XVxj6GsEPDtJYDTm5ZYUMk9Xdx3cQ"
                         },
                         "refreshToken": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NUb2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkNJNkltTTRPRE5qT0dFMkxURTFPREV0TkRFNE1TMWhZbU0xTFdJMk9EVmtNamc0WWpkaE1pSXNJbWxoZENJNk1UWTJNemN3TXpnNE5pd2laWGh3SWpveE5qWXpOekEwTkRnMmZRLkVSLXl6ZVE2Y0xoLWs3WFZ4ajZHc0VQRHRKWURUbTVaWVVNazlYZHgzY1EiLCJpYXQiOjE2NjM3MDM4ODYsImV4cCI6MTY2Mzc5MDI4Nn0.AxNddItZzZxW960_arUPNm14qTMx0WtWdRZkyLft4HQ"
                         }
                       }
                     }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password is not valid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": {
+                    "code": 401,
+                    "reason": "WRONG_PASSWORD",
+                    "message": "Wrong password. Please pass valid password."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Account does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": {
+                    "code": 404,
+                    "reason": "EMAIL_NOT_FOUND",
+                    "message": "Email not found. Please pass email that exists."
                   }
                 }
               }
@@ -68,6 +138,9 @@
         "summary": "Register",
         "description": "Be time capsule enjoyer.",
         "operationId": "register",
+        "tags": [
+          "Authentication"
+        ],
         "requestBody": {
           "description": "Register request payload",
           "required": true,
@@ -76,6 +149,10 @@
               "schema": {
                 "title": "RegisterRequest",
                 "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -95,7 +172,7 @@
         },
         "responses": {
           "201": {
-            "description": "Succesful Registeration",
+            "description": "Succesful Registration",
             "content": {
               "application/json": {
                 "schema": {
@@ -106,10 +183,136 @@
                       "type": "object",
                       "properties": {
                         "accessToken": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM4ODNjOGE2LTE1ODEtNDE4MS1hYmM1LWI2ODVkMjg4YjdhMiIsImlhdCI6MTY2MzcwMzg4NiwiZXhwIjoxNjYzNzA0NDg2fQ.ER-yzeQ6cLh-k7XVxj6GsEPDtJYDTm5ZYUMk9Xdx3cQ"
                         },
                         "refreshToken": {
-                          "type": "string"
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NUb2tlbiI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpwWkNJNkltTTRPRE5qT0dFMkxURTFPREV0TkRFNE1TMWhZbU0xTFdJMk9EVmtNamc0WWpkaE1pSXNJbWxoZENJNk1UWTJNemN3TXpnNE5pd2laWGh3SWpveE5qWXpOekEwTkRnMmZRLkVSLXl6ZVE2Y0xoLWs3WFZ4ajZHc0VQRHRKWURUbTVaWVVNazlYZHgzY1EiLCJpYXQiOjE2NjM3MDM4ODYsImV4cCI6MTY2Mzc5MDI4Nn0.AxNddItZzZxW960_arUPNm14qTMx0WtWdRZkyLft4HQ"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Failed registration due to business constraint",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": {
+                    "code": 422,
+                    "reason": "EMAIL_ALREADY_TAKEN",
+                    "message": "Email is already taken. Please use another email."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/resend-email-verification": {
+      "post": {
+        "summary": "Resend Email Verification",
+        "description": "Haven't verify your email? Try to resend the email verification.",
+        "operationId": "ResendEmailVerification",
+        "tags": [
+          "Authentication"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Email verification sent."
+          },
+          "422": {
+            "description": "Email is already verified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": {
+                    "code": 422,
+                    "reason": "EMAIL_ALREADY_VERIFIED",
+                    "message": "Email already verified."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/files": {
+      "post": {
+        "summary": "Upload File",
+        "description": "Upload file to our back-end.\nYou will receive a URL if it's successful.\n\nFile **MUST** be less than 1MB. We couldn't afford to pay more storage right now.\n",
+        "tags": [
+          "File"
+        ],
+        "operationId": "UploadFile",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Upload file payload",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "title": "UploadFileRequest",
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Upload file succesful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "UploadFileResponse",
+                  "type": "object",
+                  "properties": {
+                    "file": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "1b2ea0b0-0f96-4634-91a7-28ad7942251d"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "1b2ea0b0-0f96-4634-91a7-28ad7942251d-industrial-society-and-its-future.pdf"
+                        },
+                        "url": {
+                          "type": "string",
+                          "example": "/uploads/1b2ea0b0-0f96-4634-91a7-28ad7942251d-industrial-society-and-its-future.pdf"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
                         }
                       }
                     }
@@ -120,8 +323,428 @@
           }
         }
       }
+    },
+    "/v1/time-capsules": {
+      "post": {
+        "summary": "Create Time Capsule",
+        "description": "Add new time capsules to our service.\nIf you want to add attachment, please upload it via [UploadFile](#/File/UploadFile)\n",
+        "tags": [
+          "Time Capsule"
+        ],
+        "operationId": "CreateTimeCapsule",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Create Time Capsule Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "CreateTimeCapsuleRequest",
+                "type": "object",
+                "required": [
+                  "subject",
+                  "message",
+                  "releasedAt"
+                ],
+                "properties": {
+                  "subject": {
+                    "type": "string",
+                    "example": "Remember the day when you're in love?"
+                  },
+                  "message": {
+                    "type": "string",
+                    "example": "Yeah, you must remember it."
+                  },
+                  "attachmentUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://localhost:8000/uploads/industrial-society-and-its-future.pdf"
+                  },
+                  "releasedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Time Capsule sucessfully created!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "CreateTimeCapsuleResponse",
+                  "type": "object",
+                  "properties": {
+                    "timeCapsule": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "1b2ea0b0-0f96-4634-91a7-28ad7942251d"
+                        },
+                        "subject": {
+                          "type": "string",
+                          "example": "Remember the day when you're in love?"
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "releasedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Create time capsule request is not satisfiable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": {
+                    "code": 400,
+                    "reason": "BAD_REQUEST",
+                    "message": "Request parameter is not valid. Please pass valid request parameter based on the API Contract."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Time capsule creations failed to due business constraint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "TIME_CAPSULE_RELEASE_TIME_INVALID": {
+                    "value": {
+                      "error": {
+                        "code": 422,
+                        "reason": "TIME_CAPSULE_RELEASE_TIME_INVALID",
+                        "message": "Release time must be on the future. Please pass valid release time."
+                      }
+                    }
+                  },
+                  "TIME_CAPSULE_ATTACHMENT_FILE_NOT_EXISTS": {
+                    "value": {
+                      "error": {
+                        "code": 422,
+                        "reason": "TIME_CAPSULE_ATTACHMENT_FILE_NOT_EXISTS",
+                        "message": "Attachment file does not exists. Please pass attachment file that exists."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Time Capsules",
+        "description": "Retrieve current user's list of time capsules.\nYou can specify the page number, or page size.\nAlso you can filter it based on the parameters below.\nYou can also sort the list based on the JSON:API Specs.\n",
+        "tags": [
+          "Time Capsule"
+        ],
+        "operationId": "ListTimeCapsules",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "sort",
+            "description": "Sorting parameter to sort the list. It uses the sort format from [JSON:API specs](https://jsonapi.org/format/#fetching-sorting).\nAllowed sort parameters:\n- `subject`\n- `active`\n- `createdAt`\n- `updatedAt`\n- `releasedAt`\n\nExample:\n\n```\nreleasedAt,-createdAt\n```\n",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageNumber",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Time Capsule sucessfully listed!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ListTimeCapsuleResponse",
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "pageNumber": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "pageSize": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "pageCount": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "size": {
+                          "type": "integer",
+                          "example": 100
+                        }
+                      }
+                    },
+                    "timeCapsules": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "1b2ea0b0-0f96-4634-91a7-28ad7942251d"
+                          },
+                          "subject": {
+                            "type": "string",
+                            "example": "Remember the day when you're in love?"
+                          },
+                          "active": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "releasedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "List time capsules request is not satisifiable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "BAD_REQUEST": {
+                    "value": {
+                      "error": {
+                        "code": 400,
+                        "reason": "BAD_REQUEST",
+                        "message": "Request parameter is not valid. Please pass valid request parameter based on the API Contract."
+                      }
+                    }
+                  },
+                  "OUT_OF_RANGE": {
+                    "value": {
+                      "error": {
+                        "code": 400,
+                        "reason": "OUT_OF_RANGE",
+                        "message": "Page number is out of range. Please pass valid page number."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/time-capsules/{id}": {
+      "get": {
+        "summary": "Get Time Capsule",
+        "description": "Retrieve active time capsule and read the message",
+        "tags": [
+          "Time Capsule"
+        ],
+        "operationId": "GetTimeCapsule",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Time Capsule sucessfully created!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "CreateTimeCapsuleResponse",
+                  "type": "object",
+                  "properties": {
+                    "timeCapsule": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "1b2ea0b0-0f96-4634-91a7-28ad7942251d"
+                        },
+                        "subject": {
+                          "type": "string",
+                          "example": "Remember the day when you're in love?"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "Yeah, you must remember it."
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "releasedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Get time capsule request is not satisfiable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": {
+                    "code": 400,
+                    "reason": "BAD_REQUEST",
+                    "message": "Request parameter is not valid. Please pass valid request parameter based on the API Contract."
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Time capsule is not owned by current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": {
+                    "code": 403,
+                    "reason": "TIME_CAPSULE_MISMATCH_OWNER",
+                    "message": "Time capsule is not owned by you. Please find your own time capsule."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Time capsule is not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": {
+                    "code": 404,
+                    "reason": "TIME_CAPSULE_NOT_FOUND",
+                    "message": "Time capsule is not found. Please find existing time capsule."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Time capsule is not activated yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": {
+                    "code": 422,
+                    "reason": "TIME_CAPSULE_INACTIVE",
+                    "message": "Cannot open time capsule before its release time. Please wait until it is released."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
-  "components": {},
   "tags": []
 }

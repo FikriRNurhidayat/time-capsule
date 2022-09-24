@@ -6,8 +6,13 @@ class Job {
 
   dispatch = () => {
     cron.schedule(this.schedule, () => {
-      log.debug("Processing", this.constructor.name);
-      this.call();
+      try {
+        log.debug("Processing", this.constructor.name);
+        this.call();
+      } catch (err) {
+        log.error(err.message);
+        log.debug(err.stack);
+      }
     });
   };
 }

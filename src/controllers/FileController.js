@@ -67,7 +67,7 @@ class FileController extends Controller {
       })
       .then(({ file }) => {
         const body = this.buildReply({ file });
-        res.status(200).json(body);
+        res.status(201).json(body);
       })
       .catch(next);
 }

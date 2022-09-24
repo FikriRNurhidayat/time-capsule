@@ -1,4 +1,6 @@
 const swaggerJsdoc = require("swagger-jsdoc");
+const compiledSwaggerJSON = require("../docs/openapi.json");
+const { NODE_ENV = "development" } = process.env;
 
 const options = {
   failOnErrors: true, // Whether or not to throw when parsing errors. Defaults to false.
@@ -40,4 +42,7 @@ const options = {
   apis: ["./src/controllers/*.js"],
 };
 
-module.exports = swaggerJsdoc(options);
+module.exports =
+  NODE_ENV == "development" || NODE_ENV == "test"
+    ? swaggerJsdoc(options)
+    : compiledSwaggerJSON;

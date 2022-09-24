@@ -1,3 +1,4 @@
+const express = require("express");
 const config = require("./config");
 const {
   Controller,
@@ -28,7 +29,9 @@ const {
 } = require("./services");
 const { LocalUploader } = require("./uploaders");
 
-module.exports = function injectDependency(server) {
+module.exports = function createServer() {
+  const server = express();
+
   // Common Managers
   // Instantiate PasswordManager
   server.passwordManager = new PasswordManager({ salt: 10 });

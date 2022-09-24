@@ -1,15 +1,23 @@
+const express = require("express");
+const path = require("path");
+const logger = require("morgan");
+const swaggerUi = require("swagger-ui-express");
+const docs = require("./docs");
 const {
   useValidation,
   useAuthorization,
   useFormData,
 } = require("./middlewares");
 const { typeIs } = require("./lib");
-const { TYPE_FUNCTION } = require("./consts");
-const POST = "post",
-  GET = "get",
-  PUT = "put",
-  PATCH = "patch",
-  DELETE = "delete";
+const { TYPE_FUNCTION, LOG_FORMAT } = require("./consts");
+
+const POST = "post";
+const GET = "get";
+const PUT = "put";
+const PATCH = "patch";
+const DELETE = "delete";
+
+const PUBLIC_DIRECTORY = path.join(__dirname, "../public");
 
 module.exports = function configureRoute(server) {
   const routes = [
@@ -66,8 +74,15 @@ module.exports = function configureRoute(server) {
     },
   ];
 
-  // Apply routes to router
+  server.use(express.json());
+  server.use(logger(LOG_FORMAT));
+  server.use("/docs", swaggerUi.serve);
+  server.get("/docs.swagger.json", (req, res) => res.status(200).json(docs));
+  server.get("/docs", swaggerUi.setup(docs));
+  server.use(express.static(PUBLIC_DIRECTORY));
+
   applyRoutes(server, routes);
+
   server.use(server.controller.onLost);
   server.use(server.controller.onError);
 

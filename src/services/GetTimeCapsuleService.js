@@ -16,7 +16,7 @@ class GetTimeCapsuleService {
     if (timeCapsule.userId !== userId) throw TIME_CAPSULE_MISMATCH_OWNER;
     if (!timeCapsule.active) throw TIME_CAPSULE_INACTIVE;
 
-    return timeCapsule;
+    return timeCapsule.toDetailJSON();
   }
 }
 

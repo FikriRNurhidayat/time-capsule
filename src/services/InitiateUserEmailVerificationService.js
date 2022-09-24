@@ -23,7 +23,7 @@ class InitiateUserEmailVerificationService {
     const user = await this.userRepository.find(id);
     const emailVerificationToken = this.generateEmailVerificationToken();
 
-    if (user.isEmailVerified) throw EMAIL_ALREADY_VERIFIED;
+    if (!!user.isEmailVerified) throw EMAIL_ALREADY_VERIFIED;
 
     user.encryptedEmailVerificationToken = this.encryptEmailVerificationToken(
       emailVerificationToken

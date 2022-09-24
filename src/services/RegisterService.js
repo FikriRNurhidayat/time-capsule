@@ -32,6 +32,7 @@ class RegisterService {
     const encryptedPassword = this.passwordManager.encrypt(password);
     const user = new User({
       email: email.toLowerCase(),
+      isEmailVerified: false,
       encryptedPassword,
     });
 
