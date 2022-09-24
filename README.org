@@ -38,6 +38,7 @@ For this application, we use DDD pattern to build our application. This is very 
 - Independent of UI
 - Independent of Database (We can replace Sequelize without worrying to much)
 - Independent of any external agency
+
 * Prerequisites
 
 In order to run this application, you need the following software installed on your system:
@@ -49,34 +50,49 @@ That's it.
 
 * How to Run?
 
-1. There's a file called =docker-compose.yaml= in this project, you can just simply run it, *BUT*, you need to setup the environment variable first on the =.env=. Check for the =.env.example= for the list of environment variable that you can set. Most of them are optional, but there are required environment variable related to mailer.
-2. Retrieve Google OAuth2 Credentials.
-   1. Open https://console.cloud.google.com
-      [[./docs/images/01.Google-Cloud-Platform.png]]
-   2. Open the *API & Services*, then click *OAuth consent screen*.
-      [[./docs/images/02.OAuth-Consent-Screen.png]]
-      1. Setup your *OAuth consent screen*, just set it up as is. No need special configuration there.
-      2. Add yourself in the *Test users*, since we won't publish this application to the public.
-   3. Go to *Credentials* and *Create Credentials*, choose *OAuth Client ID*
-      [[./docs/images/03.Credentials.png]]
-   4. Setup OAuth Client ID
-      1. Choose *Web application* as *Application Type*
-      2. Fill other field as is.
-      3. Then, add new *Authorized redirect URIs* with https://developers.google.com/oauthplayground, make sure you didn't insert it with trailing slash.
-      4. Copy the *OAuth Client ID* and *OAuth Client Secret* somewhere, this will be used later.
-   5. Go to [[https://developers.google.com/oauthplayground][Google OAuth Playground]]
-      [[./docs/images/04.Playground2.png]]
-      1. Set the *OAuth Client ID* with yours
-      2. Set the *OAuth Client Secret* with yours
-      3. Add https://mail.google.com as Scopes, then *Authorize APIs*
-      4. Then *Exchange authorization code for tokens*, after that copy the *Refresh Token* that are generated.
-      5. You're set.
-   6. Modify your =.env= file, add the following variable:
-      #+begin_src sh
-TIME_CAPSULE_MAILER_USER=YOUR_EMAIL
-TIME_CAPSULE_MAILER_CLIENT_ID=YOUR_CLIENT_ID
-TIME_CAPSULE_MAILER_CLIENT_SECRET=YOUR_CLIENT_SECRET
-TIME_CAPSULE_MAILER_REDIRECT_URI=https://developers.google.com/oauthplayground
-TIME_CAPSULE_MAILER_REFRESH_TOKEN=YOUR_REFRESH_TOKEN
-      #+end_src
-3. Then run, =docker-compose up=, and you're done. You can access the API documentation via http://localhost:8080/docs
+- There's a file called =docker-compose.yaml= in this project, you can just simply run it, *BUT*, you need to setup the environment variable first on the =.env=. Check for the =.env.example= for the list of environment variable that you can set. Most of them are optional, but there are required environment variable related to mailer.
+- Retrieve Google OAuth2 Credentials.
+
+  - Open https://console.cloud.google.com
+
+    [[./docs/images/01.Google-Cloud-Platform.png]]
+
+  - Open the *API & Services*, then click *OAuth consent screen*.
+
+    [[./docs/images/02.OAuth-Consent-Screen.png]]
+
+    - Setup your *OAuth consent screen*, just set it up as is. No need special configuration there.
+    - Add yourself in the *Test users*, since we won't publish this application to the public.
+
+  - Go to *Credentials* and *Create Credentials*, choose *OAuth Client ID*
+
+    [[./docs/images/03.Credentials.png]]
+
+  - Setup OAuth Client ID
+
+    - Choose *Web application* as *Application Type*
+    - Fill other field as is.
+    - Then, add new *Authorized redirect URIs* with https://developers.google.com/oauthplayground, make sure you didn't insert it with trailing slash.
+    - Copy the *OAuth Client ID* and *OAuth Client Secret* somewhere, this will be used later.
+
+  - Go to [[https://developers.google.com/oauthplayground][Google OAuth Playground]]
+
+    [[./docs/images/04.Playground2.png]]
+
+    1. Set the *OAuth Client ID* with yours
+    2. Set the *OAuth Client Secret* with yours
+    3. Add https://mail.google.com as Scopes, then *Authorize APIs*
+    4. Then *Exchange authorization code for tokens*, after that copy the *Refresh Token* that are generated.
+    5. You're set.
+
+  - Modify your =.env= file, add the following variable:
+
+  #+begin_src sh
+  TIME_CAPSULE_MAILER_USER=YOUR_EMAIL
+  TIME_CAPSULE_MAILER_CLIENT_ID=YOUR_CLIENT_ID
+  TIME_CAPSULE_MAILER_CLIENT_SECRET=YOUR_CLIENT_SECRET
+  TIME_CAPSULE_MAILER_REDIRECT_URI=https://developers.google.com/oauthplayground
+  TIME_CAPSULE_MAILER_REFRESH_TOKEN=YOUR_REFRESH_TOKEN
+  #+end_src
+
+- Then run, =docker-compose up=, and you're done. You can access the API documentation via http://localhost:8080/docs
