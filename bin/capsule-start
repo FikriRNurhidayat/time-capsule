@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+require("dotenv").config();
+
+const { PORT = 8000 } = process.env;
+const server = require("../src/server");
+const log = require("../src/lib/log");
+const package = require("../package.json")
+const env = process.env.NODE_ENV || "development";
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log("=>", "Booting time capsule server")
+  console.log("=>", `Express ${package.dependencies.express} application starting in ${env}`)
+  console.log("Express starting in single mode...")
+  console.log("*", `Version ${package.version} (node ${process.version}), codename: ${process.release.lts}`)
+  console.log("*", `Environment: ${env}`)
+  console.log("*", `Listening on tcp://localhost:${PORT}`)
+  console.log("Use Ctrl-C to stop")
+});

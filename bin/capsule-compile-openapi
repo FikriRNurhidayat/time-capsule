@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+const fs = require("fs");
+const path = require("path");
+const docs = require("../src/docs");
+
+const OUTPUT_PATH = path.join(__dirname, "../openapi.json");
+
+fs.writeFileSync(OUTPUT_PATH, JSON.stringify(docs, null, 2));
