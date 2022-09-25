@@ -87,6 +87,12 @@ class TimeCapsuleController extends Controller {
    *                                code: 422
    *                                reason: TIME_CAPSULE_ATTACHMENT_FILE_NOT_EXISTS
    *                                message: Attachment file does not exists. Please pass attachment file that exists.
+   *                          TIME_CAPSULE_USER_NOT_VERIFIED:
+   *                            value:
+   *                              error:
+   *                                code: 422
+   *                                reason: TIME_CAPSULE_USER_NOT_VERIFIED
+   *                                message: You're not verified. Please verify your email first, since we will release time capsule to your email.
    *            201:
    *                description: Time Capsule sucessfully created!
    *                content:

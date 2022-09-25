@@ -6,14 +6,16 @@ const {
   TIME_CAPSULE_RELEASE_TIME_INVALID,
   TIME_CAPSULE_ATTACHMENT_URL_NOT_VALID,
   TIME_CAPSULE_ATTACHMENT_FILE_NOT_EXISTS,
+  TIME_CAPSULE_USER_NOT_VERIFIED,
 } = require("../errors");
 const { TIME_CAPSULE_BASE_URL } = require("../config");
 const { PUBLIC_DIRECTORY } = require("../consts");
 const dayjs = require("dayjs");
 
 class CreateTimeCapsuleService {
-  constructor({ timeCapsuleRepository }) {
+  constructor({ timeCapsuleRepository, userRepository }) {
     this.timeCapsuleRepository = timeCapsuleRepository;
+    this.userRepository = userRepository;
   }
 
   checkIfReleaseTimeInTheFuture(releasedAt) {
@@ -31,9 +33,16 @@ class CreateTimeCapsuleService {
     }
   }
 
+  async checkIfUserVerified(userId) {
+    const user = await this.userRepository.find(userId);
+    if (!user.isEmailVerified) throw TIME_CAPSULE_USER_NOT_VERIFIED;
+  }
+
   async call({ subject, message, attachmentUrl, userId, releasedAt }) {
     this.checkIfReleaseTimeInTheFuture(releasedAt);
     if (!!attachmentUrl) this.checkIfAttachmentUrlExists(attachmentUrl);
+
+    await this.checkIfUserVerified(userId);
 
     const timeCapsule = new TimeCapsule({
       subject,

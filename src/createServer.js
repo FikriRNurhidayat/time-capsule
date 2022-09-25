@@ -103,6 +103,7 @@ module.exports = function createServer() {
   // Instantiate CreateTimeCapsuleService
   server.createTimeCapsuleService = new CreateTimeCapsuleService({
     timeCapsuleRepository: server.timeCapsuleRepository,
+    userRepository: server.userRepository,
   });
 
   // Instantiate ListTimeCapsulesService

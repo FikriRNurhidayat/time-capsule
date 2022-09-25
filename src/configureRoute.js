@@ -75,7 +75,7 @@ module.exports = function configureRoute(server) {
   ];
 
   server.use(express.json());
-  server.use(logger(LOG_FORMAT));
+  if (process.env.NODE_ENV != "test") server.use(logger(LOG_FORMAT));
   server.use("/docs", swaggerUi.serve);
   server.get("/docs.swagger.json", (req, res) => res.status(200).json(docs));
   server.get("/docs", swaggerUi.setup(docs));

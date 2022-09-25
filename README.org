@@ -96,3 +96,16 @@ That's it.
   #+end_src
 
 - Then run, =docker-compose up=, and you're done. You can access the API documentation via http://localhost:8080/docs
+
+* How to Test?
+
+This code is tested using Jest as testing framework. Hence, to run the test it's pretty straight forward. But there's a step that you need to follow:
+1. Create test database by running =NODE_ENV=test yarn db:create=
+1. Migrate test database by running =NODE_ENV=test yarn db:migrate=
+1. Run the test by running =yarn test=
+
+** Caveats
+
+- We haven't implement the database cleanup logic on test, so run the truncate table manually on the database.
+- We haven't optimise the server boostrap and closing yet, hence the test takes a lot of time to finish since it waits for every asynchronous process to close.
+- If your test is failing, try to increase the timeout.

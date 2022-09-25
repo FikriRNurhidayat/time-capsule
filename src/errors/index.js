@@ -52,6 +52,11 @@ module.exports = {
     "TIME_CAPSULE_ATTACHMENT_FILE_NOT_EXISTS",
     "Attachment file does not exists. Please pass attachment file that exists."
   ),
+  TIME_CAPSULE_USER_NOT_VERIFIED: new Trouble(
+    422,
+    "TIME_CAPSULE_USER_NOT_VERIFIED",
+    "You're not verified. Please verify your email first, since we will release time capsule to your email."
+  ),
   TIME_CAPSULE_MISMATCH_OWNER: new Trouble(
     403,
     "TIME_CAPSULE_MISMATCH_OWNER",

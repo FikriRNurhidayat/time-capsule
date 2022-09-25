@@ -37,9 +37,7 @@
         "summary": "Login",
         "description": "Retrieve access token by sending existing credentials",
         "operationId": "login",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "requestBody": {
           "description": "Login request payload",
           "required": true,
@@ -48,10 +46,7 @@
               "schema": {
                 "title": "LoginRequest",
                 "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
+                "required": ["email", "password"],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -138,9 +133,7 @@
         "summary": "Register",
         "description": "Be time capsule enjoyer.",
         "operationId": "register",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "requestBody": {
           "description": "Register request payload",
           "required": true,
@@ -149,10 +142,7 @@
               "schema": {
                 "title": "RegisterRequest",
                 "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
+                "required": ["email", "password"],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -222,9 +212,7 @@
         "summary": "Resend Email Verification",
         "description": "Haven't verify your email? Try to resend the email verification.",
         "operationId": "ResendEmailVerification",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -258,9 +246,7 @@
       "post": {
         "summary": "Upload File",
         "description": "Upload file to our back-end.\nYou will receive a URL if it's successful.\n\nFile **MUST** be less than 1MB. We couldn't afford to pay more storage right now.\n",
-        "tags": [
-          "File"
-        ],
+        "tags": ["File"],
         "operationId": "UploadFile",
         "security": [
           {
@@ -328,9 +314,7 @@
       "post": {
         "summary": "Create Time Capsule",
         "description": "Add new time capsules to our service.\nIf you want to add attachment, please upload it via [UploadFile](#/File/UploadFile)\n",
-        "tags": [
-          "Time Capsule"
-        ],
+        "tags": ["Time Capsule"],
         "operationId": "CreateTimeCapsule",
         "security": [
           {
@@ -345,18 +329,17 @@
               "schema": {
                 "title": "CreateTimeCapsuleRequest",
                 "type": "object",
-                "required": [
-                  "subject",
-                  "message",
-                  "releasedAt"
-                ],
+                "required": ["subject", "message", "releasedAt"],
                 "properties": {
                   "subject": {
                     "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255,
                     "example": "Remember the day when you're in love?"
                   },
                   "message": {
                     "type": "string",
+                    "minLength": 1,
                     "example": "Yeah, you must remember it."
                   },
                   "attachmentUrl": {
@@ -469,9 +452,7 @@
       "get": {
         "summary": "List Time Capsules",
         "description": "Retrieve current user's list of time capsules.\nYou can specify the page number, or page size.\nAlso you can filter it based on the parameters below.\nYou can also sort the list based on the JSON:API Specs.\n",
-        "tags": [
-          "Time Capsule"
-        ],
+        "tags": ["Time Capsule"],
         "operationId": "ListTimeCapsules",
         "security": [
           {
@@ -499,6 +480,13 @@
             "name": "pageSize",
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "active",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -607,9 +595,7 @@
       "get": {
         "summary": "Get Time Capsule",
         "description": "Retrieve active time capsule and read the message",
-        "tags": [
-          "Time Capsule"
-        ],
+        "tags": ["Time Capsule"],
         "operationId": "GetTimeCapsule",
         "security": [
           {
