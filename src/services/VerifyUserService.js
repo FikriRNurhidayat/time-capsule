@@ -25,7 +25,7 @@ class VerifyUserService {
 
     this.checkEmailVerificationToken(user, emailVerificationToken);
 
-    user.isEmailConfirmed = true;
+    user.isEmailVerified = true;
     await this.userRepository.save(user);
   }
 }
