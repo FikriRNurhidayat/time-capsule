@@ -48,7 +48,7 @@ In order to run this application, you need the following software installed on y
 
 That's it.
 
-* How to Run?
+* How to run?
 
 - There's a file called =docker-compose.yaml= in this project, you can just simply run it, *BUT*, you need to setup the environment variable first on the =.env=. Check for the =.env.example= for the list of environment variable that you can set. Most of them are optional, but there are required environment variable related to mailer.
 - Retrieve Google OAuth2 Credentials.
@@ -97,7 +97,16 @@ That's it.
 
 - Then run, =docker-compose up=, and you're done. You can access the API documentation via http://localhost:8080/docs
 
-* How to Test?
+* How to run without docker?
+- Set your =.env= file based on the =.env.example=
+  - Database config
+  - OAuth2 Credentials
+  - etc.
+- Run =yarn db:create= to create the database.
+- Run =yarn db:migrate= to migrate the database.
+- Run =yarn start= to run the HTTP server.
+- Run =yarn work= to run the Worker that run cronjobs.
+* How to test?
 
 This code is tested using Jest as testing framework. Hence, to run the test it's pretty straight forward. But there's a step that you need to follow:
 1. Create test database by running =NODE_ENV=test yarn db:create=
