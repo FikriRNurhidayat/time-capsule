@@ -48,6 +48,11 @@ In order to run this application, you need the following software installed on y
 
 That's it.
 
+If you tend to run it without docker, hence you need the following software:
+- =postgresql=
+- =nodejs=
+- =yarn=
+
 * How to run?
 
 - There's a file called =docker-compose.yaml= in this project, you can just simply run it, *BUT*, you need to setup the environment variable first on the =.env=. Check for the =.env.example= for the list of environment variable that you can set. Most of them are optional, but there are required environment variable related to mailer.
